@@ -209,12 +209,12 @@ def train_classifier( cars, notcars, color_space='RGB', spatial_size=(32, 32),
 
   
 def check_datasets():
-   
     # Verify that the car images are cars and the same for the notcars by 
     # plotting some randomly.
 
     plot_random_images( pars.cars, 'Car images' )
     plot_random_images( pars.notcars, 'Not car images' )
+
 
 def plot_random_images( images_list, text = '' ):
     
@@ -228,13 +228,31 @@ def plot_random_images( images_list, text = '' ):
         
     fig.suptitle(text)
 
+
+def test_hog_features():
+     
+    image_files = [ pars.cars[random.randint(0,len(pars.cars)-1)],
+                    pars.notcars[random.randint(0,len(pars.cars)-1)] ]
+ 
+    for image_file in image_files:
+        
+        image = mpimg.imread( image_file )
+    
+        get_hog_features(   image, 
+                            hog_channel = pars.hog_channel,
+                            orient = pars.orient, 
+                            pix_per_cell = pars.pix_per_cell,
+                            cell_per_block = pars.cell_per_block, 
+                            feature_vec = True, 
+                            plot_figure = True)
+
+
+
 if __name__ == '__main__':
     # If this module is called directly, train the classifier and check the 
     # features selected.
     print('Training SVM classifier')
-    
-    check_datasets()
-    
+    check_datasets()    
     svc, X_scaler = train_classifier(   pars.cars, 
                                         pars.notcars,
                                         color_space = pars.color_space, 

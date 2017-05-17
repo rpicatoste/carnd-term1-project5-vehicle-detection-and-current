@@ -27,60 +27,69 @@ This document is the writeup.
 
 The code related to the HOG features extraction is in the module called `classifier.py`. If this module is run on its own, it will train the classifier with the parameters given in the module `parameters.py`, where all the configurable parameters for this project are stored.
 
-Also, when the module classifier is run, it will show the HOG feature extraction using the parameters selected. Below an example image is shown.
+Also, when the module classifier is run, it will show the HOG feature extraction using the parameters selected. In this way is very easy to try different values and appreciate quickly if they give a good impression about if the hog features seem to point out a difference between cars and not cars, and if it will be too much information or just enough.
 
+Below an example for a car and a not car are shown with the parameters selected. The original image and the 3 hog channel features are shown.
 
-![alt text](./output_images/hog_example.jpg)
+![alt text](./output_images/hog_example_car.png)
+![alt text](./output_images/hog_example_notcar.png)
+
 
 ####2. Explain how you settled on your final choice of HOG parameters.
 
-The final parameters selected have been a combination of testing and searching good values for it.
+The parameters have been selected basically by trial and error, and a bit of common sense. Some attempts would clearly not provide enough information, whilst others looked good, but had to be fine-tuned once in the video generation. The module described in the previous point is used to iterate quickly with different parameters.
 
 
 ####3. Describe how (and identify where in your code) you trained a classifier using your selected HOG features (and color features if you used them).
 
-I trained a linear SVM using...
+To provide more flexibility and the possibility to fit to more complex data, I used the non-linear SVM (the SVC). The parameters are basic ones recommended, and they worked fine just like that. The accuracy achieved is above 99%, a 99.34% with the last parameters and the full images dataset.
 
-I started by reading in all the `vehicle` and `non-vehicle` images.  Here is an example of one of each of the `vehicle` and `non-vehicle` classes:
+To assure that the training set is the expected, the module will also print a random set of car and not-car before training, as shown below:
 
+![alt text](./output_images/car_images.png)
 
+![alt text](./output_images/not_car_images.png)
 
+Then the features for each dataset are extracted, using hog, color histogram and and spatial features to get the maximum information that can be useful from each image.
+
+---
 ###Sliding Window Search
 
 ####1. Describe how (and identify where in your code) you implemented a sliding window search.  How did you decide what scales to search and how much to overlap windows?
 
-I decided to search random window positions at random scales all over the image and came up with this (ok just kidding I didn't actually ;):
+The search window functions are implemented in the module `search_and_classify.py`. Once again, in `parameters.py` we can choose the characteristic of the grid of image patches that will be passed to the classifier. In parameters there is a dictionary defining the different aspects of these windows, and when the module is executed, the selected grid is plot over an example image, like below.
 
-![alt text][image3]
+![alt text](./output_images/grid.png)
+
+The selected grid scans for big cars that are near the bottom part of the image, middle sized a bit above, and small in the top of the relevant part of the image (where there is road). Normally the size in the image will correspond to those windows positions.
+
+The sizes, overlaps and limits per kind of window where select by iterating over them and checking the plot above. I selected one where the cars seemed to fit in the different window sizes. 
+
 
 ####2. Show some examples of test images to demonstrate how your pipeline is working.  What did you do to optimize the performance of your classifier?
 
 Ultimately I searched on two scales using YCrCb 3-channel HOG features plus spatially binned color and histograms of color in the feature vector, which provided a nice result.  Here are some example images:
 
-![alt text][image4]
+
+
 ---
 
 ### Video Implementation
 
 ####1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (somewhat wobbly or unstable bounding boxes are ok as long as you are identifying the vehicles most of the time with minimal false positives.)
-Here's a [link to my video result](./project_video.mp4)
+
+The video obtained is included in the github repository.
 
 
 ####2. Describe how (and identify where in your code) you implemented some kind of filter for false positives and some method for combining overlapping bounding boxes.
 
-I recorded the positions of positive detections in each frame of the video.  From the positive detections I created a heatmap and then thresholded that map to identify vehicle positions.  I then used `scipy.ndimage.measurements.label()` to identify individual blobs in the heatmap.  I then assumed each blob corresponded to a vehicle.  I constructed bounding boxes to cover the area of each blob detected.  
+For each frame of the video the heat pipeline was applied. The heatmap is held between frames, but "cooled down" every time to remove the areas were there was a car, but is not there anymore. 
 
-Here's an example result showing the heatmap from a series of frames of video, the result of `scipy.ndimage.measurements.label()` and the bounding boxes then overlaid on the last frame of video:
+In this way, with the proper threshold, the single false detection pass without being plot, and a frame with a worst detection over a car is compensated when it has been detected reliably before.
 
-### Here are six frames and their corresponding heatmaps:
+The label functions from scipy is used to get the final box bounding the detected car, since each car appears in several boxes from the grid presented before.
 
-![alt text][image5]
-
-### Here is the output of `scipy.ndimage.measurements.label()` on the integrated heatmap from all six frames:
-![alt text][image6]
-
-### Here the resulting bounding boxes are drawn onto the last frame in the series:
-![alt text][image7]
+Here the heatmap in action is shown, with the final bounding box:
 
 
 
@@ -90,5 +99,7 @@ Here's an example result showing the heatmap from a series of frames of video, t
 
 ####1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
 
-Here I'll talk about the approach I took, what techniques I used, what worked and why, where the pipeline might fail and how I might improve it if I were going to pursue this project further.  
+I tried to do all the examples given during the lessons, which finally were very helpful. I tried the code in the most clean and user-friendly way, so I could easily test different parameters and quickly get the results. 
+
+Finding a combination of parameters and the way to have a heatmap between frames that provides a proper detection between video frames has been hard, with many failed attempts. Finally I opted to use the smaller dataset, as it was more manageable training the SVC many times. 
 

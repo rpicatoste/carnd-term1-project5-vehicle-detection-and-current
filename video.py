@@ -24,7 +24,7 @@ if('clip' in vars() or 'clip' in globals()):
     del clip
     
 clip = VideoFileClip( video + '.mp4' )
-project_video_result = clip.fl_image( sc.pipeline ) #NOTE: this function expects color images!!
+project_video_result = clip.fl_image( sc.pipeline_heat ) #NOTE: this function expects color images!!
  
 project_video_result.write_videofile('results\\' + video + '_result.mp4', audio=False)
 print("Video " + video + " done")

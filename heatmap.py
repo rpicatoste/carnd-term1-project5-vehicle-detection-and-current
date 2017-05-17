@@ -1,37 +1,23 @@
-import matplotlib.image as mpimg
-import matplotlib.pyplot as plt
 import numpy as np
-import pickle
 import cv2
-from scipy.ndimage.measurements import label
 
 
-#
-## Read in a pickle file with bboxes saved
-## Each item in the "all_bboxes" list will contain a 
-## list of boxes for one of the images shown above
-#box_list = pickle.load( open( "bbox_pickle.p", "rb" ))
-#
-## Read in image similar to one shown above 
-#image = mpimg.imread('test_image.jpg')
-#heat = np.zeros_like(image[:,:,0]).astype(np.float)
-
+# This function adds 1 to the areas passed in the list of boxes to heatmap.
 def add_heat(heatmap, bbox_list):
     # Iterate through list of bboxes
     for box in bbox_list:
         # Add += 1 for all pixels inside each bbox
-        # Assuming each "box" takes the form ((x1, y1), (x2, y2))
         heatmap[box[0][1]:box[1][1], box[0][0]:box[1][0]] += 1
 
-    # Return updated heatmap
-    return heatmap# Iterate through list of bboxes
+    return heatmap
     
+# Funtion to apply a threshold below which the value will be set to 0.
 def apply_threshold(heatmap, threshold):
     # Zero out pixels below the threshold
     heatmap[heatmap <= threshold] = 0
-    # Return thresholded map
     return heatmap
 
+# Function to plot the boxes containing cars obtained with the label function.
 def draw_labeled_bboxes(img, labels):
     # Iterate through all detected cars
     for car_number in range(1, labels[1]+1):
