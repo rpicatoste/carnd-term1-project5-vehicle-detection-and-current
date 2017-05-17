@@ -12,26 +12,42 @@ import random
 
 import parameters as pars
 
+
 # Define a function to return HOG features and visualization
-def get_hog_features(feature_image, hog_channel, orient, pix_per_cell, cell_per_block, feature_vec = True):
+def get_hog_features(feature_image, hog_channel, orient, pix_per_cell, cell_per_block, feature_vec = True, plot_figure = False):
 
     if hog_channel == 'ALL':
         channels = list(range(feature_image.shape[2]))
     else:
         channels = [hog_channel]
-        
-    hog_features = []
+    
+    hog_features =[]
+    hog_image = [np.zeros_like(feature_image)] * len(channels)
+    
     for channel in channels:
-        features, hog_image = hog(  feature_image[:,:,channel], 
-                                    orient, 
-                                    (pix_per_cell, pix_per_cell),  
-                                    (cell_per_block, cell_per_block), 
-                                    transform_sqrt = True, 
-                                    visualise = True, 
-                                    feature_vector = True) 
+        features, hog_image[channel] = hog( feature_image[:,:,channel], 
+                                                orient, 
+                                                (pix_per_cell, pix_per_cell),  
+                                                (cell_per_block, cell_per_block), 
+                                                transform_sqrt = True, 
+                                                visualise = True, 
+                                                feature_vector = True) 
         hog_features.append(features)
+        
     
     hog_features = np.ravel(hog_features)        
+    
+    if plot_figure:
+        fig, ax = plt.subplots(2,2, figsize = (12,12) )
+        ax[0][0].imshow( feature_image )
+        ax[0][0].axis('off')
+        ax[0][1].imshow( hog_image[0] )
+        ax[0][1].axis('off')
+        ax[1][0].imshow( hog_image[1] )
+        ax[1][0].axis('off')
+        ax[1][1].imshow( hog_image[2] )
+        ax[1][1].axis('off')
+    
     return hog_features
 
 # Define a function to compute binned color features.

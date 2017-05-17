@@ -31,8 +31,8 @@ print('Number of samples used: ', sample_size)
 # HOG
 color_space = 'HLS' #'YUV' #  Can be RGB, HSV, LUV, HLS, YUV, YCrCb
 orient          = 11 #9 # HOG orientations
-pix_per_cell    = 16 #8 # HOG pixels per cell
-cell_per_block  = 2     # HOG cells per block
+pix_per_cell    = 8 #8  # HOG pixels per      (pix_per_cell, pix_per_cell)
+cell_per_block  = 2     # HOG cells per block (cell_per_block, cell_per_block)
 hog_channel     = 'ALL' # Can be 0, 1, 2, or "ALL"
 # Spatial binning
 spatial_size = (16, 16) # Spatial binning dimensions
@@ -66,3 +66,38 @@ combinations['y_limit'] = [#(380, 500),
 
 
 combinations['num_window'] = list(range( len(combinations['color']) ))
+
+
+
+
+def test_hog_features():
+ 
+    image_files = [  'course\\vehicles_smallset\\cars3\\1188.jpeg',
+                     'course\\vehicles_smallset\\cars3\\1189.jpeg',
+                     'course\\non-vehicles_smallset\\notcars3\\extra317_158.jpeg',
+                     'course\\non-vehicles_smallset\\notcars3\\extra324_147.jpeg']
+#    image_files = ['test_images/test1.jpg']
+ 
+    for image_file in image_files:
+        
+        image = mpimg.imread( image_file )
+    
+        cs.get_hog_features(image, 
+                            hog_channel = hog_channel,
+                            orient = orient, 
+                            pix_per_cell = pix_per_cell,
+                            cell_per_block = cell_per_block, 
+                            feature_vec = True, 
+                            plot_figure = True)
+
+
+if __name__ == '__main__':
+    import matplotlib.image as mpimg
+    
+    import classifier as cs
+    # If this module is called directly, train the classifier and check the 
+    # features selected.
+    test_hog_features()
+    
+    
+    
