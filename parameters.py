@@ -54,18 +54,19 @@ combinations['window_size'] = [ (60, 60),
                                 (140, 140),
                                 (230, 230)]
 
-combinations['overlap'] = [ (0.3, )*2,
+combinations['overlap'] = [ (0.0, )*2,
                             (0.4, )*2,
                             (0.5, 0.7)]
 
-combinations['y_limit'] = [(360, 480),
+combinations['y_limit'] = [(360, 550),
                            (350, 650),
                            (380, 720)]
 
-combinations['num_window'] = list(range(1, len(combinations['color']) ))
+combinations['num_window'] = list(range(0, len(combinations['color']) ))
 
 # Heatmap
 heatmap_threshold = 2
+max_heat = 6
 
 image_files = ['test_images/test1.jpg',
                'test_images/test2.jpg',
@@ -86,7 +87,8 @@ if __name__ == '__main__':
     import search_and_classify as sc
 
     print('Training SVM classifier')
-#    cs.check_datasets()    
+    cs.check_datasets()    
+
     svc, X_scaler = cs.train_classifier(   cars, 
                                         notcars,
                                         color_space = color_space, 
@@ -102,12 +104,8 @@ if __name__ == '__main__':
     
     pickle.dump( (svc, X_scaler), open( "trained_svc.p", "wb" ) )
 
-#    cs.test_hog_features()
-    
-    
+    cs.test_hog_features()
     
     sc.plot_grid()        
     sc.test_search_and_classify()
     
-    # Generate video
-#    import video

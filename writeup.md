@@ -26,11 +26,11 @@ This document is the writeup.
 
 ####1. Explain how (and identify where in your code) you extracted HOG features from the training images.
 
-The code related to the HOG features extraction is in the module called `classifier.py`. If this module is run on its own, it will train the classifier with the parameters given in the module `parameters.py`, where all the configurable parameters for this project are stored.
+The code related to the HOG features extraction is in the module called `classifier.py`. To train the classifier with the parameters chosen, the module `parameters.py`, where all the configurable parameters for this project are stored, must be run. These module have been done to ease testing different configurations and see quickly the effect. 
 
-Also, when the module classifier is run, it will show the HOG feature extraction using the parameters selected. In this way is very easy to try different values and appreciate quickly if they give a good impression about if the hog features seem to point out a difference between cars and not cars, and if it will be too much information or just enough.
+When a set of parameters is run, the resulting HOG feature extraction is shown. In this way is very easy to try different values and appreciate if they give a good impression about if the hog features will emphasize differences between cars and not cars, and if it will be too much information or just enough.
 
-Below an example for a car and a not car are shown with the parameters selected. The original image and the 3 hog channel features are shown.
+Below an example for a car and a not-car are shown with the parameters selected. The original image and the 3 hog channel features are shown.
 
 ![alt text](./output_images/hog_example_car.png)
 ![alt text](./output_images/hog_example_notcar.png)
@@ -43,7 +43,7 @@ The parameters have been selected basically by trial and error, and a bit of com
 
 ####3. Describe how (and identify where in your code) you trained a classifier using your selected HOG features (and color features if you used them).
 
-To provide more flexibility and the possibility to fit to more complex data, I used the non-linear SVM (the SVC). The parameters are basic ones recommended, and they worked fine just like that. The accuracy achieved is above 99%, a 99.34% with the last parameters and the full images dataset.
+To provide more flexibility and the possibility to fit to more complex data, I used the non-linear SVM (the SVC). The parameters are basic ones recommended, and they worked fine just like that. The accuracy achieved is above 99%.
 
 To assure that the training set is the expected, the module will also print a random set of car and not-car before training, as shown below:
 
@@ -51,7 +51,7 @@ To assure that the training set is the expected, the module will also print a ra
 
 ![alt text](./output_images/not_car_images.png)
 
-Then the features for each dataset are extracted, using hog, color histogram and and spatial features to get the maximum information that can be useful from each image.
+Then the features for each dataset are extracted, using hog and color histogram. The spatial features were not helping during the tests, in fact showing a poorer capability to detect cars in the images.
 
 ---
 ###Sliding Window Search
@@ -83,7 +83,8 @@ The final parameters are in the parameters module. I chose YUV color space after
 
 ####1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (somewhat wobbly or unstable bounding boxes are ok as long as you are identifying the vehicles most of the time with minimal false positives.)
 
-The video obtained is included in the github repository.
+The video obtained can be seen [here](https://youtu.be/3GyVa2nEB9I).
+
 
 
 ####2. Describe how (and identify where in your code) you implemented some kind of filter for false positives and some method for combining overlapping bounding boxes.
@@ -94,7 +95,7 @@ In this way, with the proper threshold, the single false detection pass without 
 
 The label functions from scipy is used to get the final box bounding the detected car, since each car appears in several boxes from the grid presented before.
 
-Here the heatmap in action is shown, with the final bounding box:
+The heatmap in action is shown in the previous point, together with the pipeline for car detection.
 
 
 

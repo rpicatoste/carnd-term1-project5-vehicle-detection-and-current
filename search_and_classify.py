@@ -195,9 +195,8 @@ def pipeline_heat( image, return_images = False ):
     hot_windows_all = []
     # Cool down the heat map
 #    print('heat before cooling', np.unique(heat))
-    max_heat = 4
-    heat[heat>max_heat] = max_heat
-    heat[heat > pars.heatmap_threshold] -= 1
+    heat[heat > pars.max_heat] = pars.max_heat
+    heat[heat > 0] -= 1
     heat[heat < 0] = 0
 #    print('heat after cooling', np.unique(heat))
     

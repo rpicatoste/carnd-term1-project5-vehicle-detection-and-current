@@ -6,3 +6,4 @@ project_video_out.mp4
 test_video.mp4
 project_video.mp4
 results/test_video_result.mp4
+*.mp4
