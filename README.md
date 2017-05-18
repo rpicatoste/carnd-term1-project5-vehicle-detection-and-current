@@ -1,20 +1,7 @@
 # Vehicle Detection
 
+The report for the project can be found in writeup.md.
 
-The goals / steps of this project are the following:
+To see the resulting detection  with the parameters selected, run parameters.py (will need the datasets).
 
-* Perform a Histogram of Oriented Gradients (HOG) feature extraction on a labeled training set of images and train a classifier Linear SVM classifier
-*
-* Optionally, you can also apply a color transform and append binned color features, as well as histograms of color, to your HOG feature vector. 
-*
-* Note: for those first two steps don't forget to normalize your features and randomize a selection for training and testing.
-* 
-* Implement a sliding-window technique and use your trained classifier to search for vehicles in images.
-* 
-* Run your pipeline on a video stream (start with the test_video.mp4 and later implement on full project_video.mp4) and create a heat map of recurring detections frame by frame to reject outliers and follow detected vehicles.
-* 
-* Estimate a bounding box for vehicles detected.
-
-**As an optional challenge** Once you have a working pipeline for vehicle detection, add in your lane-finding algorithm from the last project to do simultaneous lane-finding and vehicle detection!
-
-**If you're feeling ambitious** (also totally optional though), don't stop there!  We encourage you to go out and take video of your own, and show us how you would implement this project on a new video!
+To generate the video run video.py.
