@@ -17,8 +17,8 @@ for image_filename in image_filenames_all:
     elif 'vehicles' in image_filename:
         cars.append(image_filename)
 
-# Equalize the samples if different.
-sample_size = min(len(cars), len(notcars))
+# Equalize the samples if different, or limit if necessary.
+sample_size = min(len(cars), len(notcars), 5000)
 cars = cars[0:sample_size]
 notcars = notcars[0:sample_size]
 
@@ -27,7 +27,7 @@ print('Number of samples used: ', sample_size)
 # Classifier parameters
 # Parameters of the features selected.
 # HOG
-color_space = 'YUV' # 'HLS' # Can be RGB, HSV, LUV, HLS, YUV, YCrCb
+color_space = 'YUV' #'YUV' #  Can be RGB, HSV, LUV, HLS, YUV, YCrCb
 orient          = 11 #9 # HOG orientations
 pix_per_cell    = 16 #8  # HOG pixels per      (pix_per_cell, pix_per_cell)
 cell_per_block  = 2     # HOG cells per block (cell_per_block, cell_per_block)
@@ -38,7 +38,7 @@ spatial_size = (16, 16) # Spatial binning dimensions
 hist_bins = 16    # Number of histogram bins
 
 spatial_feat = False # Spatial features on or off
-hist_feat = False # Histogram features on or off
+hist_feat = True # Histogram features on or off
 hog_feat = True # HOG features on or off
 
 video_image_size = (720, 1280, 3)
@@ -62,7 +62,7 @@ combinations['y_limit'] = [(360, 480),
                            (350, 650),
                            (380, 720)]
 
-combinations['num_window'] = list(range( len(combinations['color']) ))
+combinations['num_window'] = list(range(1, len(combinations['color']) ))
 
 # Heatmap
 heatmap_threshold = 2
@@ -74,13 +74,19 @@ image_files = ['test_images/test1.jpg',
                'test_images/test5.jpg',
                'test_images/test6.jpg']
     
+
    
 if __name__ == '__main__':
     
+    # If this module is called directly, train the classifier and check the 
+    # features selected.
+    
     import classifier as cs
     import pickle
+    import search_and_classify as sc
+
     print('Training SVM classifier')
-    cs.check_datasets()    
+#    cs.check_datasets()    
     svc, X_scaler = cs.train_classifier(   cars, 
                                         notcars,
                                         color_space = color_space, 
@@ -96,10 +102,12 @@ if __name__ == '__main__':
     
     pickle.dump( (svc, X_scaler), open( "trained_svc.p", "wb" ) )
 
-    # If this module is called directly, train the classifier and check the 
-    # features selected.
-    cs.test_hog_features()
+#    cs.test_hog_features()
     
-    import search_and_classify as sc
+    
+    
     sc.plot_grid()        
     sc.test_search_and_classify()
+    
+    # Generate video
+#    import video

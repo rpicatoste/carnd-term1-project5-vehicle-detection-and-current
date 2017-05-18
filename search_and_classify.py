@@ -58,6 +58,15 @@ def slide_window(   img, x_start_stop = [None, None], y_start_stop = [None, None
             # Append window position to list
             window_list.append(((startx, starty), (endx, endy)))
     
+        # Add a window at the right extreme of the image to ensure full coverage
+        # Calculate window position
+        startx = x_start_stop[1] - xy_window[0]
+        endx = x_start_stop[1] 
+        starty = ys*ny_pix_per_step + y_start_stop[0]
+        endy = starty + xy_window[1]
+        
+        # Append window position to list
+        window_list.append(((startx, starty), (endx, endy)))
     return window_list
 
 
@@ -77,12 +86,13 @@ def plot_grid():
     image = mpimg.imread( pars.image_files[0] )
     draw_image = np.copy( image )
     
-    for ii, window_size, color, overlap, y_limit in zip(pars.combinations['num_window'],
-                                                        pars.combinations['window_size'],
-                                                        pars.combinations['color'],
-                                                        pars.combinations['overlap'],
-                                                        pars.combinations['y_limit']):
+    for ii in pars.combinations['num_window']:
         
+        window_size = pars.combinations['window_size'][ii]
+        color = pars.combinations['color'][ii]
+        overlap = pars.combinations['overlap'][ii]
+        y_limit = pars.combinations['y_limit'][ii]
+
         windows = slide_window( image, 
                                 x_start_stop = [None, None], 
                                 y_start_stop = y_limit, 
@@ -187,15 +197,17 @@ def pipeline_heat( image, return_images = False ):
 #    print('heat before cooling', np.unique(heat))
     max_heat = 4
     heat[heat>max_heat] = max_heat
-    heat[heat > 0] -= 1
+    heat[heat > pars.heatmap_threshold] -= 1
     heat[heat < 0] = 0
 #    print('heat after cooling', np.unique(heat))
     
-    for ii, window_size, color, overlap, y_limit in zip(pars.combinations['num_window'],
-                                                        pars.combinations['window_size'],
-                                                        pars.combinations['color'],
-                                                        pars.combinations['overlap'],
-                                                        pars.combinations['y_limit']):
+    for ii in pars.combinations['num_window']:
+        
+        window_size = pars.combinations['window_size'][ii]
+        color = pars.combinations['color'][ii]
+        overlap = pars.combinations['overlap'][ii]
+        y_limit = pars.combinations['y_limit'][ii]
+        
         hot_windows,_  = pipeline_search( image, 
                                           y_limit, 
                                           window_size, 
