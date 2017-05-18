@@ -128,6 +128,12 @@ def search_windows( img, windows, clf, scaler, color_space = 'RGB',
                                             hog_feat = hog_feat)
         
         # Scale extracted features to be fed to classifier
+#        try:
+#            print(len(features))
+#            print(features[0].shape)
+#            print(features.shape)
+#        except ValueError:
+#            pass
         test_features = scaler.transform(np.array(features).reshape(1, -1))
         
         # Predict using the classifier
@@ -201,7 +207,7 @@ def pipeline_heat( image, return_images = False ):
         
     # Apply threshold to help remove false positives
 #    print('heat before thres', np.unique(heat))
-    heat = hm.apply_threshold(heat, 1)
+    heat = hm.apply_threshold(heat, pars.heatmap_threshold)
 #    print('heat after thres', np.unique(heat))
     
     # Visualize the heatmap when displaying    
@@ -250,6 +256,5 @@ def test_search_and_classify():
         ax[2].imshow(heatmap, cmap='hot')
         ax[2].set_title('Heat Map')
         fig.tight_layout()    
-        fig.show()
-        fig.waitforbuttonpress()
+
         

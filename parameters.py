@@ -29,7 +29,7 @@ print('Number of samples used: ', sample_size)
 # HOG
 color_space = 'YUV' # 'HLS' # Can be RGB, HSV, LUV, HLS, YUV, YCrCb
 orient          = 11 #9 # HOG orientations
-pix_per_cell    = 8 #8  # HOG pixels per      (pix_per_cell, pix_per_cell)
+pix_per_cell    = 16 #8  # HOG pixels per      (pix_per_cell, pix_per_cell)
 cell_per_block  = 2     # HOG cells per block (cell_per_block, cell_per_block)
 hog_channel     = 'ALL' # Can be 0, 1, 2, or "ALL"
 # Spatial binning
@@ -37,8 +37,8 @@ spatial_size = (16, 16) # Spatial binning dimensions
 # Color histogram
 hist_bins = 16    # Number of histogram bins
 
-spatial_feat = True # Spatial features on or off
-hist_feat = True # Histogram features on or off
+spatial_feat = False # Spatial features on or off
+hist_feat = False # Histogram features on or off
 hog_feat = True # HOG features on or off
 
 video_image_size = (720, 1280, 3)
@@ -56,13 +56,16 @@ combinations['window_size'] = [ (60, 60),
 
 combinations['overlap'] = [ (0.3, )*2,
                             (0.4, )*2,
-                            (0.5, )*2]
+                            (0.5, 0.7)]
 
 combinations['y_limit'] = [(360, 480),
-                           (390, 600),
-                           (450, 720)]
+                           (350, 650),
+                           (380, 720)]
 
 combinations['num_window'] = list(range( len(combinations['color']) ))
+
+# Heatmap
+heatmap_threshold = 2
 
 image_files = ['test_images/test1.jpg',
                'test_images/test2.jpg',
