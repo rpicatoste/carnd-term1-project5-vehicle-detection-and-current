@@ -18,7 +18,7 @@ for image_filename in image_filenames_all:
         cars.append(image_filename)
 
 # Equalize the samples if different, or limit if necessary.
-sample_size = min(len(cars), len(notcars), 5000)
+sample_size = max(len(cars), len(notcars))
 cars = cars[0:sample_size]
 notcars = notcars[0:sample_size]
 
