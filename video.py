@@ -2,7 +2,6 @@
 # Import everything needed to edit/save/watch video clips
 from moviepy.editor import VideoFileClip
 import os 
-import numpy as np
 
 import search_and_classify as sc
 
@@ -12,8 +11,8 @@ if not os.path.exists(directory):
         
 
 # next video
-video = 'project_video'
 video = 'test_video'
+video = 'project_video'
 project_video_result_file = 'results\\'
 
         
@@ -24,8 +23,8 @@ if('clip' in vars() or 'clip' in globals()):
     del clip
     
 clip = VideoFileClip( video + '.mp4' )
-project_video_result = clip.fl_image( sc.pipeline_heat ) #NOTE: this function expects color images!!
+project_video_result = clip.fl_image( sc.pipeline_heat ) 
  
-project_video_result.write_videofile('results\\' + video + '_result.mp4', audio=False)
+project_video_result.write_videofile('results\\' + video + '_result2.mp4', audio=False)
 print("Video " + video + " done")
 

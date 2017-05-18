@@ -137,15 +137,15 @@ def search_windows( img, windows, clf, scaler, color_space = 'RGB',
         if prediction == 1:
             on_windows.append(window)
             
+    # Returns a list of windows            
     return on_windows
     
 # The pipeline for the search and classify will receive an image and apply the
 # configures grid to the classifier, and return the lost of boxes with a case 
 # detected and an image with them drawn on it.    
-def pipeline_search( image, y_limit, window_size, 
-                            overlap, color ):
+def pipeline_search( image, y_limit, window_size, overlap, color ):
     
-    draw_image = np.copy( image )
+    image_with_bboxes = np.copy( image )
  
     windows = slide_window( image, 
                             x_start_stop = [None, None], 
@@ -165,9 +165,9 @@ def pipeline_search( image, y_limit, window_size,
                                     hist_feat = pars.hist_feat, 
                                     hog_feat = pars.hog_feat)                       
         
-    draw_image = draw_boxes(draw_image, hot_windows, color=color, thick=6) 
+    image_with_bboxes = draw_boxes(image_with_bboxes, hot_windows, color=color, thick=6) 
     
-    return hot_windows, draw_image
+    return hot_windows, image_with_bboxes
     
 # The heat pipeline will receive images, expected to be sequential, and will 
 # apply the heatmap on the result. It will hold results from one fram to the 
@@ -176,13 +176,13 @@ def pipeline_search( image, y_limit, window_size,
 def pipeline_heat( image, return_images = False ):
     
     global heat
-    
+    hot_windows_all = []
     # Cool down the heat map
 #    print('heat before cooling', np.unique(heat))
-    max_heat = 3
+    max_heat = 4
     heat[heat>max_heat] = max_heat
     heat[heat > 0] -= 1
-    heat[heat<0] = 0
+    heat[heat < 0] = 0
 #    print('heat after cooling', np.unique(heat))
     
     for ii, window_size, color, overlap, y_limit in zip(pars.combinations['num_window'],
@@ -190,13 +190,14 @@ def pipeline_heat( image, return_images = False ):
                                                         pars.combinations['color'],
                                                         pars.combinations['overlap'],
                                                         pars.combinations['y_limit']):
-        hot_windows, draw_image = pipeline_search(image, 
-                                                  y_limit, 
-                                                  window_size, 
-                                                  overlap, 
-                                                  color )
+        hot_windows,_  = pipeline_search( image, 
+                                          y_limit, 
+                                          window_size, 
+                                          overlap, 
+                                          color )
         # Add heat to each box in box list
         heat = hm.add_heat(heat, hot_windows)
+        hot_windows_all = hot_windows_all + hot_windows
         
     # Apply threshold to help remove false positives
 #    print('heat before thres', np.unique(heat))
@@ -208,18 +209,17 @@ def pipeline_heat( image, return_images = False ):
     
     # Find final boxes from heatmap using label function
     labels = label(heatmap)
-    draw_img = hm.draw_labeled_bboxes(np.copy(image), labels)
+    image_labeled = hm.draw_labeled_bboxes(np.copy(image), labels)
     #Restart every cycle
 #    heat = np.zeros_like( heat )
-    
+    image_with_bboxes = draw_boxes(image, hot_windows_all, color=color, thick=6)
 #    plt.figure()
 #    plt.imshow(heatmap, cmap='hot')
-#     
     
     if return_images:
-        return draw_img, draw_image, heatmap
+        return image_labeled, image_with_bboxes, heatmap
     else:
-        return draw_img
+        return image_labeled
     
 
 def test_search_and_classify():
@@ -249,5 +249,7 @@ def test_search_and_classify():
         
         ax[2].imshow(heatmap, cmap='hot')
         ax[2].set_title('Heat Map')
-        fig.tight_layout()          
+        fig.tight_layout()    
+        fig.show()
+        fig.waitforbuttonpress()
         

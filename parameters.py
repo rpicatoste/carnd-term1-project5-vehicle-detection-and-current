@@ -50,13 +50,15 @@ combinations['color'] = [ (0, 0,   255),
                           (0, 255,  0), 
                           (255, 255, 0)]
 
-combinations['window_size'] = [ #(70, 70),
+combinations['window_size'] = [ (60, 60),
                                 (140, 140),
                                 (230, 230)]
-overlap_val = 0.5
-combinations['overlap'] = [(overlap_val, overlap_val)] * 3
 
-combinations['y_limit'] = [#(380, 500),
+combinations['overlap'] = [ (0.3, )*2,
+                            (0.4, )*2,
+                            (0.5, )*2]
+
+combinations['y_limit'] = [(360, 480),
                            (390, 600),
                            (450, 720)]
 
@@ -74,22 +76,23 @@ if __name__ == '__main__':
     
     import classifier as cs
     import pickle
-#    print('Training SVM classifier')
-#    cs.check_datasets()    
-#    svc, X_scaler = cs.train_classifier(   cars, 
-#                                        notcars,
-#                                        color_space = color_space, 
-#                                        spatial_size = spatial_size, 
-#                                        hist_bins = hist_bins, 
-#                                        orient = orient, 
-#                                        pix_per_cell = pix_per_cell, 
-#                                        cell_per_block = cell_per_block, 
-#                                        hog_channel = hog_channel, 
-#                                        spatial_feat = spatial_feat, 
-#                                        hist_feat = hist_feat, 
-#                                        hog_feat = hog_feat)
+    print('Training SVM classifier')
+    cs.check_datasets()    
+    svc, X_scaler = cs.train_classifier(   cars, 
+                                        notcars,
+                                        color_space = color_space, 
+                                        spatial_size = spatial_size, 
+                                        hist_bins = hist_bins, 
+                                        orient = orient, 
+                                        pix_per_cell = pix_per_cell, 
+                                        cell_per_block = cell_per_block, 
+                                        hog_channel = hog_channel, 
+                                        spatial_feat = spatial_feat, 
+                                        hist_feat = hist_feat, 
+                                        hog_feat = hog_feat)
     
     pickle.dump( (svc, X_scaler), open( "trained_svc.p", "wb" ) )
+
     # If this module is called directly, train the classifier and check the 
     # features selected.
     cs.test_hog_features()

@@ -17,10 +17,11 @@ The goals / steps of this project are the following:
 ---
 ###Writeup / README
 
-####1. Provide a Writeup / README that includes all the rubric points and how you addressed each one.  You can submit your writeup as markdown or pdf.  [Here](https://github.com/udacity/CarND-Vehicle-Detection/blob/master/writeup_template.md) is a template writeup for this project you can use as a guide and a starting point.  
+####1. Provide a Writeup / README that includes all the rubric points and how you addressed each one.  You can submit your writeup as markdown or pdf.  
 
 This document is the writeup.
 
+---
 ###Histogram of Oriented Gradients (HOG)
 
 ####1. Explain how (and identify where in your code) you extracted HOG features from the training images.
@@ -68,7 +69,11 @@ The sizes, overlaps and limits per kind of window where select by iterating over
 
 ####2. Show some examples of test images to demonstrate how your pipeline is working.  What did you do to optimize the performance of your classifier?
 
-Ultimately I searched on two scales using YCrCb 3-channel HOG features plus spatially binned color and histograms of color in the feature vector, which provided a nice result.  Here are some example images:
+The final parameters are in the parameters module. I chose YUV color space after trying HSL with less accuracy. I played with the HOG pixels and blocks, and in the end I had to us a relatively dense grid of windows to search, which made it quite slow for computation. A couple of images are shown below. 
+
+![alt text](./output_images/pipeline_1.png)
+
+![alt text](./output_images/pipeline_2.png)
 
 
 
