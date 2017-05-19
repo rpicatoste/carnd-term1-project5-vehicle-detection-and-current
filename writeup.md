@@ -85,7 +85,7 @@ The final parameters are in the parameters module. I chose YUV color space after
 
 The video obtained can be seen [here](https://youtu.be/3GyVa2nEB9I).
 
-New video for re-submission, [here]().
+New video for re-submission, [here](https://youtu.be/YPxfV-PiQp0).
 
 ####2. Describe how (and identify where in your code) you implemented some kind of filter for false positives and some method for combining overlapping bounding boxes.
 
